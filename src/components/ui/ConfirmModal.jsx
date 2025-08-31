@@ -61,19 +61,19 @@ const ConfirmModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-      <div className="bg-card rounded-2xl shadow-modal max-w-md w-full animate-scale-in">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full animate-scale-in border-2 border-gray-200">
         <div className="p-6">
           {/* Icon */}
-          <div className={`w-16 h-16 ${styles.iconBg} rounded-full flex items-center justify-center mx-auto mb-4`}>
+          <div className={`w-16 h-16 ${styles.iconBg} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
             <Icon name={icon} size={32} className={styles.iconColor} />
           </div>
 
           {/* Content */}
           <div className="text-center mb-6">
-            <h3 className="text-xl font-heading font-bold text-foreground mb-2">
+            <h3 className="text-xl font-black text-gray-900 mb-2">
               {title}
             </h3>
-            <p className="text-muted-foreground font-body">
+            <p className="text-gray-600">
               {message}
             </p>
           </div>
@@ -86,6 +86,7 @@ const ConfirmModal = ({
               fullWidth
               onClick={onClose}
               disabled={loading}
+              className="border-2 border-gray-200 hover:border-gray-300 rounded-2xl font-semibold"
             >
               {cancelText}
             </Button>
@@ -95,6 +96,7 @@ const ConfirmModal = ({
               fullWidth
               onClick={onConfirm}
               loading={loading}
+              className="rounded-2xl font-semibold"
             >
               {confirmText}
             </Button>
