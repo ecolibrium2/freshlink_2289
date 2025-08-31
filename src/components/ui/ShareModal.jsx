@@ -100,25 +100,25 @@ const ShareModal = ({ isOpen, onClose, vendor }) => {
   ];
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-card rounded-2xl shadow-modal max-w-md w-full animate-slide-up">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full animate-scale-in border-2 border-gray-200">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border">
-          <h2 className="text-lg font-heading font-semibold text-foreground">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <h2 className="text-lg font-black text-gray-900">
             Compartilhar perfil
           </h2>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors duration-200"
+            className="w-8 h-8 rounded-2xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-200"
           >
             <Icon name="X" size={16} />
           </button>
         </div>
 
         {/* Vendor Preview */}
-        <div className="p-6 border-b border-border">
+        <div className="p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted flex-shrink-0">
+            <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 flex-shrink-0">
               <Image
                 src={vendor.image}
                 alt={vendor.name}
@@ -126,18 +126,18 @@ const ShareModal = ({ isOpen, onClose, vendor }) => {
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-body font-semibold text-foreground truncate">
+              <h3 className="font-bold text-gray-900 truncate">
                 {vendor.name}
               </h3>
-              <p className="text-sm text-muted-foreground truncate">
+              <p className="text-sm text-gray-600 truncate">
                 {vendor.description || `Produtos frescos em ${vendor.location}`}
               </p>
               <div className="flex items-center space-x-1 mt-1">
                 <Icon name="Star" size={14} className="text-warning fill-current" />
-                <span className="text-sm font-body font-medium text-foreground">
+                <span className="text-sm font-bold text-gray-900">
                   {vendor.rating?.toFixed(1)}
                 </span>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-gray-500">
                   • {vendor.productCount} produtos
                 </span>
               </div>
@@ -147,21 +147,21 @@ const ShareModal = ({ isOpen, onClose, vendor }) => {
 
         {/* Share Options */}
         <div className="p-6">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             {shareOptions.map((option) => (
               <button
                 key={option.name}
                 onClick={option.action}
-                className="flex items-center space-x-3 p-3 rounded-xl border border-border hover:bg-muted/50 hover:border-primary/20 transition-all duration-200 group"
+                className="flex items-center space-x-3 p-4 rounded-2xl border-2 border-gray-200 hover:bg-gray-50 hover:border-primary/30 transition-all duration-300 group transform hover:scale-105"
               >
-                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center group-hover:bg-primary/10 transition-colors duration-200">
+                <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center group-hover:bg-primary/10 transition-colors duration-200">
                   <Icon 
                     name={option.icon} 
                     size={18} 
-                    className="text-muted-foreground group-hover:text-primary transition-colors duration-200" 
+                    className="text-gray-500 group-hover:text-primary transition-colors duration-200" 
                   />
                 </div>
-                <span className="text-sm font-body font-medium text-foreground">
+                <span className="text-sm font-semibold text-gray-900">
                   {option.name}
                 </span>
               </button>

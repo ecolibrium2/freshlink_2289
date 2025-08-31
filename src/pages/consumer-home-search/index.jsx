@@ -334,15 +334,15 @@ const ConsumerHomeSearch = () => {
                 onTouchStart={handlePullToRefresh}
             >
                 {/* Hero Carousel */}
-                <HeroCarousel className="mb-8" />
+                <HeroCarousel className="mb-12" />
 
                 {/* Category Chips */}
-                <div className="mb-8">
+                <div className="mb-12">
                     <div className="mb-6">
-                        <h2 className="font-heading font-bold text-xl text-foreground mb-1">
+                        <h2 className="text-2xl font-black text-gray-900 mb-1">
                             Busque por Categorias
                         </h2>
-                        <p className="text-sm font-body text-muted-foreground">
+                        <p className="text-gray-600 font-medium">
                             Encontre exatamente o que você procura
                         </p>
                     </div>
@@ -350,10 +350,10 @@ const ConsumerHomeSearch = () => {
                 </div>
 
                 {/* Featured Products */}
-                <FeaturedProducts className="mb-8" onProductClick={handleProductClick} />
+                <FeaturedProducts className="mb-12" onProductClick={handleProductClick} />
 
                 {/* Promotional Banners */}
-                <PromotionalBanners className="mb-8" />
+                <PromotionalBanners className="mb-12" />
 
                 {/* Location Selector */}
                 <div className="flex items-center justify-between mb-6">
@@ -371,10 +371,10 @@ const ConsumerHomeSearch = () => {
                 {/* Results Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h2 className="font-heading font-bold text-xl text-foreground mb-1">
+                        <h2 className="text-2xl font-black text-gray-900 mb-1">
                             {searchQuery ? `Resultados para "${searchQuery}"` : 'Vendedores Próximos'}
                         </h2>
-                        <p className="text-sm font-body text-muted-foreground">
+                        <p className="text-gray-600 font-medium">
                             {vendors?.length} {vendors?.length === 1 ? 'vendedor encontrado' : 'vendedores encontrados'} em {currentLocation?.name}
                         </p>
                     </div>
@@ -382,15 +382,15 @@ const ConsumerHomeSearch = () => {
                     {/* Sort Options */}
                     <div className="flex items-center space-x-2">
                         <Button
-                            variant="outline"
+                            variant="default"
                             size="sm"
                             iconName="Map"
                             onClick={() => navigate('/vendors-map')}
-                            className="hidden md:flex"
+                            className="hidden md:flex bg-primary hover:bg-primary/90 text-white rounded-2xl font-semibold"
                         >
                             Ver no Mapa
                         </Button>
-                        <button className="flex items-center space-x-2 px-3 py-2 bg-muted border border-border rounded-lg text-sm font-body font-medium text-foreground hover:bg-muted/80 transition-colors duration-200">
+                        <button className="flex items-center space-x-2 px-4 py-2.5 bg-white border-2 border-gray-200 hover:border-primary/50 rounded-2xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-primary transition-all duration-200 shadow-sm hover:shadow-lg">
                             <span>Recomendados</span>
                             <Icon name="ChevronDown" size={16} />
                         </button>
@@ -415,7 +415,7 @@ const ConsumerHomeSearch = () => {
                     onLoadMore={handleLoadMore}
                     hasMore={hasMore}
                     loadingMore={loadingMore}
-                    className="mb-8"
+                    className="mb-12"
                     id="vendor-grid"
                 />
             </main>

@@ -314,7 +314,7 @@ const VendorProfileProducts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-col">
       <Helmet>
         <title>{vendorData?.name} - Produtos Frescos | FreshLink</title>
         <meta name="description" content={`Confira os produtos frescos da ${vendorData?.name} em ${vendorData?.location}. Entrega local disponível.`} />

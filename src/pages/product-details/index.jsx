@@ -313,29 +313,29 @@ const ProductDetails = () => {
     const images = Array.isArray(product.images) ? product.images : [product.image];
 
     return (
-        <div className="min-h-screen bg-background flex flex-col">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-col">
             <ResponsiveHeader />
             
             <main className="pt-16 flex-1">
                 {/* Breadcrumb */}
-                <div className="bg-muted/50 border-b border-border">
+                <div className="bg-white border-b border-gray-200/50">
                     <div className="container mx-auto px-4 py-3">
-                        <div className="flex items-center space-x-2 text-sm font-body">
+                        <div className="flex items-center space-x-2 text-sm font-medium">
                             <button 
                                 onClick={() => navigate('/products')}
-                                className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                                className="text-gray-500 hover:text-primary transition-colors duration-200"
                             >
                                 Produtos
                             </button>
-                            <Icon name="ChevronRight" size={14} className="text-muted-foreground" />
+                            <Icon name="ChevronRight" size={14} className="text-gray-400" />
                             <button 
                                 onClick={() => navigate('/products', { state: { categoryFilter: product.category?.toLowerCase() } })}
-                                className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                                className="text-gray-500 hover:text-primary transition-colors duration-200"
                             >
                                 {product.category}
                             </button>
-                            <Icon name="ChevronRight" size={14} className="text-muted-foreground" />
-                            <span className="text-foreground font-medium truncate">{product.name}</span>
+                            <Icon name="ChevronRight" size={14} className="text-gray-400" />
+                            <span className="text-gray-900 font-semibold truncate">{product.name}</span>
                         </div>
                     </div>
                 </div>
@@ -345,7 +345,7 @@ const ProductDetails = () => {
                         {/* Image Section */}
                         <div className="space-y-4">
                             {/* Main Image */}
-                            <div className="aspect-square bg-background rounded-xl overflow-hidden border border-border relative group cursor-pointer" onClick={handleImageClick}>
+                            <div className="aspect-square bg-white rounded-2xl overflow-hidden border-2 border-gray-200 relative group cursor-pointer shadow-sm hover:shadow-lg transition-all duration-300" onClick={handleImageClick}>
                                 <Image
                                     src={images[currentImageIndex]}
                                     alt={product.name}
@@ -361,9 +361,9 @@ const ProductDetails = () => {
                                                 setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
                                             }}
                                             onClick={() => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)}
-                                            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-background transition-all duration-200 opacity-0 group-hover:opacity-100"
+                                            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-all duration-200 opacity-0 group-hover:opacity-100"
                                         >
-                                            <Icon name="ChevronLeft" size={20} className="text-foreground" />
+                                            <Icon name="ChevronLeft" size={20} className="text-gray-900" />
                                         </button>
                                         <button
                                             onClick={(e) => {
@@ -371,9 +371,9 @@ const ProductDetails = () => {
                                                 setCurrentImageIndex((prev) => (prev + 1) % images.length);
                                             }}
                                             onClick={() => setCurrentImageIndex((prev) => (prev + 1) % images.length)}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-background transition-all duration-200 opacity-0 group-hover:opacity-100"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-all duration-200 opacity-0 group-hover:opacity-100"
                                         >
-                                            <Icon name="ChevronRight" size={20} className="text-foreground" />
+                                            <Icon name="ChevronRight" size={20} className="text-gray-900" />
                                         </button>
                                     </>
                                 )}
@@ -381,10 +381,10 @@ const ProductDetails = () => {
                                 {/* Favorite Button */}
                                 <button
                                     onClick={handleFavoriteToggle}
-                                    className={`absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                    className={`absolute top-4 right-4 w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-lg ${
                                         favoriteProducts.includes(product.id)
-                                            ? 'bg-error text-white'
-                                            : 'bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-error hover:bg-background'
+                                            ? 'bg-red-500 text-white'
+                                            : 'bg-white/90 backdrop-blur-sm text-gray-400 hover:text-red-500 hover:bg-white'
                                     }`}
                                 >
                                     <Icon 
@@ -396,14 +396,14 @@ const ProductDetails = () => {
 
                                 {/* Discount Badge */}
                                 {product.discount && (
-                                    <div className="absolute top-4 left-4 bg-error text-error-foreground px-3 py-1 rounded-full text-sm font-caption font-medium">
+                                    <div className="absolute top-4 left-4 bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg">
                                         -{product.discount}%
                                     </div>
                                 )}
 
                                 {/* Organic Badge */}
                                 {product.isOrganic && (
-                                    <div className="absolute bottom-4 left-4 bg-success text-success-foreground px-3 py-1 rounded-full text-sm font-caption font-medium flex items-center space-x-1">
+                                    <div className="absolute bottom-4 left-4 bg-green-500 text-white px-3 py-1.5 rounded-full text-sm font-bold flex items-center space-x-1 shadow-lg">
                                         <Icon name="Leaf" size={14} />
                                         <span>Orgânico</span>
                                     </div>
@@ -411,7 +411,7 @@ const ProductDetails = () => {
                             </div>
 
                             {/* Click to zoom hint */}
-                            <p className="text-xs text-muted-foreground text-center">
+                            <p className="text-xs text-gray-500 text-center font-medium">
                                 Clique na imagem para ampliar
                             </p>
 
@@ -422,10 +422,10 @@ const ProductDetails = () => {
                                         <button
                                             key={index}
                                             onClick={() => setCurrentImageIndex(index)}
-                                            className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-background shadow-sm flex-shrink-0 ${
+                                            className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-white shadow-sm flex-shrink-0 ${
                                                 index === currentImageIndex
-                                                    ? 'border-primary ring-2 ring-primary/20'
-                                                    : 'border-border hover:border-primary/50'
+                                                    ? 'border-primary ring-2 ring-primary/20 shadow-lg'
+                                                    : 'border-gray-200 hover:border-primary/50'
                                             }`}
                                         >
                                             <Image
@@ -443,7 +443,7 @@ const ProductDetails = () => {
                         <div className="space-y-6">
                             {/* Header */}
                             <div>
-                                <h1 className="text-3xl font-heading font-bold text-foreground mb-3">
+                                <h1 className="text-3xl font-black text-gray-900 mb-3">
                                     {product.name}
                                 </h1>
 
@@ -451,32 +451,32 @@ const ProductDetails = () => {
                                     <div className="flex items-center space-x-1">
                                         {renderStars(product.rating)}
                                     </div>
-                                    <span className="text-sm font-medium text-foreground">
+                                    <span className="text-sm font-bold text-gray-900">
                                         {product.rating?.toFixed(1)}
                                     </span>
-                                    <span className="text-sm text-muted-foreground">
+                                    <span className="text-sm text-gray-500">
                                         ({product.reviewCount} avaliações)
                                     </span>
                                 </div>
 
                                 <div className="flex items-center space-x-4 mb-6">
                                     <div className="flex items-baseline space-x-2">
-                                        <span className="text-3xl font-heading font-bold text-primary">
+                                        <span className="text-3xl font-black text-primary">
                                             {formatPrice(product.price)}
                                         </span>
-                                        <span className="text-muted-foreground">
+                                        <span className="text-gray-600">
                                             por {product.unit}
                                         </span>
                                     </div>
                                     {product.originalPrice && (
-                                        <span className="text-lg text-muted-foreground line-through">
+                                        <span className="text-lg text-gray-400 line-through">
                                             {formatPrice(product.originalPrice)}
                                         </span>
                                     )}
                                 </div>
 
                                 {product.description && (
-                                    <p className="text-muted-foreground leading-relaxed mb-6">
+                                    <p className="text-gray-600 leading-relaxed mb-6">
                                         {product.description}
                                     </p>
                                 )}
@@ -485,9 +485,9 @@ const ProductDetails = () => {
                             {/* Product Type Label */}
                             {product.isOrganic && (
                                 <div className="mb-6">
-                                    <div className={`inline-flex items-center space-x-2 px-3 py-2 rounded-lg border ${getProductTypeColor('organic')}`}>
+                                    <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-2xl border-2 bg-green-50 text-green-700 border-green-200">
                                         <Icon name="Leaf" size={16} />
-                                        <span className="text-sm font-body font-medium">
+                                        <span className="text-sm font-bold">
                                             {getProductTypeLabel('organic')}
                                         </span>
                                     </div>
@@ -495,33 +495,33 @@ const ProductDetails = () => {
                             )}
 
                             {/* Product Details */}
-                            <div className="bg-muted/50 rounded-xl p-6 space-y-4">
-                                <h3 className="font-body font-semibold text-foreground">
+                            <div className="bg-gray-50 rounded-2xl p-6 space-y-4 border-2 border-gray-100">
+                                <h3 className="font-bold text-gray-900">
                                     Informações do Produto
                                 </h3>
                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                     <div>
-                                        <span className="text-muted-foreground">Categoria:</span>
-                                        <span className="ml-2 font-medium text-foreground">{product.category}</span>
+                                        <span className="text-gray-500">Categoria:</span>
+                                        <span className="ml-2 font-semibold text-gray-900">{product.category}</span>
                                     </div>
                                     <div>
-                                        <span className="text-muted-foreground">Estoque:</span>
-                                        <span className="ml-2 font-medium text-foreground">
+                                        <span className="text-gray-500">Estoque:</span>
+                                        <span className="ml-2 font-semibold text-gray-900">
                                             {product.stock} {product.unit}
                                         </span>
                                     </div>
                                     {product.harvestDate && (
                                         <div>
-                                            <span className="text-muted-foreground">Colheita:</span>
-                                            <span className="ml-2 font-medium text-foreground">
+                                            <span className="text-gray-500">Colheita:</span>
+                                            <span className="ml-2 font-semibold text-gray-900">
                                                 {new Date(product.harvestDate).toLocaleDateString('pt-BR')}
                                             </span>
                                         </div>
                                     )}
                                     {product.shelfLife && (
                                         <div>
-                                            <span className="text-muted-foreground">Validade:</span>
-                                            <span className="ml-2 font-medium text-foreground">{product.shelfLife}</span>
+                                            <span className="text-gray-500">Validade:</span>
+                                            <span className="ml-2 font-semibold text-gray-900">{product.shelfLife}</span>
                                         </div>
                                     )}
                                 </div>
@@ -529,22 +529,23 @@ const ProductDetails = () => {
 
                             {/* Nutritional Info */}
                             {product.nutritionalInfo && (
-                                <div className="bg-muted/50 rounded-xl p-6">
+                                <div className="bg-blue-50 rounded-2xl p-6 border-2 border-blue-100">
                                     <div className="flex items-center justify-between">
-                                        <h3 className="font-body font-semibold text-foreground">
+                                        <h3 className="font-bold text-gray-900">
                                             Informações Nutricionais
                                         </h3>
                                         <Button
-                                            variant="outline"
+                                            variant="default"
                                             size="sm"
                                             iconName="Info"
                                             iconPosition="left"
                                             onClick={() => setShowNutritionalModal(true)}
+                                            className="bg-primary hover:bg-primary/90 text-white rounded-xl font-semibold"
                                         >
                                             Ver Detalhes
                                         </Button>
                                     </div>
-                                    <p className="text-sm text-muted-foreground mt-2">
+                                    <p className="text-sm text-gray-600 mt-2">
                                         Clique para ver informações detalhadas sobre vitaminas, minerais e benefícios
                                     </p>
                                 </div>
@@ -552,12 +553,12 @@ const ProductDetails = () => {
 
                             {/* Vendor Info */}
                             {vendor && (
-                                <div className="bg-card border border-border rounded-xl p-6">
-                                    <h3 className="font-body font-semibold text-foreground mb-4">
+                                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 shadow-sm">
+                                    <h3 className="font-bold text-gray-900 mb-4">
                                         Vendedor
                                     </h3>
                                     <div className="flex items-center space-x-4">
-                                        <div className="w-16 h-16 rounded-full overflow-hidden bg-muted">
+                                        <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100">
                                             <Image
                                                 src={vendor.image}
                                                 alt={vendor.name}
@@ -565,8 +566,8 @@ const ProductDetails = () => {
                                             />
                                         </div>
                                         <div className="flex-1">
-                                            <h4 className="font-body font-medium text-foreground">{vendor.name}</h4>
-                                            <div className="flex items-center space-x-1 text-sm text-muted-foreground mb-2">
+                                            <h4 className="font-bold text-gray-900">{vendor.name}</h4>
+                                            <div className="flex items-center space-x-1 text-sm text-gray-600 mb-2">
                                                 <Icon name="MapPin" size={14} />
                                                 <span>{vendor.location}</span>
                                                 {vendor.distance && (
@@ -580,18 +581,19 @@ const ProductDetails = () => {
                                                 <div className="flex items-center space-x-1">
                                                     {renderStars(vendor.rating)}
                                                 </div>
-                                                <span className="text-sm font-medium text-foreground">
+                                                <span className="text-sm font-bold text-gray-900">
                                                     {vendor.rating?.toFixed(1)}
                                                 </span>
-                                                <span className="text-sm text-muted-foreground">
+                                                <span className="text-sm text-gray-500">
                                                     ({vendor.reviewCount} avaliações)
                                                 </span>
                                             </div>
                                         </div>
                                         <Button
-                                            variant="outline"
+                                            variant="default"
                                             size="sm"
                                             onClick={handleVendorClick}
+                                            className="bg-primary hover:bg-primary/90 text-white rounded-xl font-semibold"
                                         >
                                             Ver Perfil
                                         </Button>
@@ -616,7 +618,7 @@ const ProductDetails = () => {
                                         size="lg"
                                         iconName="MessageCircle"
                                         onClick={handleWhatsAppContact}
-                                        className="bg-success hover:bg-success/90 flex-1"
+                                        className="bg-primary hover:bg-accent flex-1 text-white rounded-2xl font-semibold py-4 shadow-lg hover:shadow-xl"
                                         disabled={!product.available}
                                     >
                                         {product.available ? 'Perguntar no WhatsApp' : 'Indisponível'}
@@ -626,6 +628,7 @@ const ProductDetails = () => {
                                         size="lg"
                                         iconName="Share"
                                         onClick={handleShare}
+                                        className="border-2 border-gray-200 hover:border-primary/50 rounded-2xl font-semibold"
                                     >
                                         Compartilhar
                                     </Button>
@@ -633,8 +636,8 @@ const ProductDetails = () => {
 
                                 {/* Stock Status */}
                                 <div className="flex items-center justify-center space-x-2 text-sm">
-                                    <div className={`w-2 h-2 rounded-full ${product.available ? 'bg-success' : 'bg-error'}`}></div>
-                                    <span className={product.available ? 'text-success' : 'text-error'}>
+                                    <div className={`w-2 h-2 rounded-full ${product.available ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                                    <span className={`font-medium ${product.available ? 'text-green-600' : 'text-red-600'}`}>
                                         {product.available ? `${product.stock} ${product.unit} disponível` : 'Produto indisponível'}
                                     </span>
                                 </div>
@@ -645,19 +648,19 @@ const ProductDetails = () => {
                     {/* Related Products Section */}
                     <div className="container mx-auto px-4 py-8">
                         <div className="mb-6">
-                            <h2 className="text-xl font-heading font-bold text-foreground mb-2">
+                            <h2 className="text-2xl font-black text-gray-900 mb-2">
                                 Produtos Relacionados
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-gray-600 font-medium">
                                 Outros produtos que você pode gostar
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                             {mockRelatedProducts.map((relatedProduct) => (
                                 <div
                                     key={relatedProduct.id}
-                                    className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer flex flex-col h-full"
+                                    className="bg-white border-2 border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg hover:shadow-gray-900/10 transition-all duration-300 group cursor-pointer flex flex-col h-full transform hover:scale-105"
                                     onClick={() => handleRelatedProductClick(relatedProduct)}
                                 >
                                     {/* Favorite Button */}
@@ -670,10 +673,10 @@ const ProductDetails = () => {
                                             setFavoriteProducts(updatedFavorites);
                                             localStorage.setItem('favoriteProducts', JSON.stringify(updatedFavorites));
                                         }}
-                                        className={`absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                        className={`absolute top-3 right-3 z-10 w-9 h-9 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-sm ${
                                             favoriteProducts.includes(relatedProduct.id)
-                                                ? 'bg-error text-white'
-                                                : 'bg-white/80 backdrop-blur-sm text-muted-foreground hover:text-error hover:bg-white'
+                                                ? 'bg-red-500 text-white'
+                                                : 'bg-white/90 backdrop-blur-sm text-gray-400 hover:text-red-500 hover:bg-white'
                                         }`}
                                     >
                                         <Icon
@@ -683,7 +686,7 @@ const ProductDetails = () => {
                                         />
                                     </button>
 
-                                    <div className="relative aspect-[4/3] overflow-hidden">
+                                    <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
                                         <Image
                                             src={relatedProduct.image}
                                             alt={relatedProduct.name}
@@ -701,12 +704,12 @@ const ProductDetails = () => {
                                     </div>
 
                                     <div className="p-3 flex-1 flex flex-col">
-                                        <h3 className="font-heading font-medium text-sm text-foreground mb-1 line-clamp-2">
+                                        <h3 className="font-bold text-sm text-gray-900 mb-1 line-clamp-2">
                                             {relatedProduct.name}
                                         </h3>
                                         <div className="flex items-center space-x-1 mb-1">
-                                            <Icon name="Store" size={12} className="text-muted-foreground" />
-                                            <span className="text-xs text-primary">
+                                            <Icon name="Store" size={12} className="text-gray-400" />
+                                            <span className="text-xs text-primary font-medium">
                                                 {relatedProduct.vendor}
                                             </span>
                                         </div>
@@ -715,16 +718,16 @@ const ProductDetails = () => {
                                             <div className="flex items-center space-x-1">
                                                 {renderStars(relatedProduct.rating).slice(0, 5)}
                                             </div>
-                                            <span className="text-xs text-muted-foreground ml-1">
+                                            <span className="text-xs text-gray-500 ml-1">
                                                 {relatedProduct.rating.toFixed(1)} ({relatedProduct.reviewCount})
                                             </span>
                                         </div>
 
                                         <div className="flex items-baseline space-x-1">
-                                            <span className="text-lg font-heading font-bold text-foreground">
+                                            <span className="text-lg font-bold text-gray-900">
                                                 {formatPrice(relatedProduct.price)}
                                             </span>
-                                            <span className="text-xs text-muted-foreground">
+                                            <span className="text-xs text-gray-500">
                                                 /{relatedProduct.unit}
                                             </span>
                                         </div>
@@ -732,7 +735,7 @@ const ProductDetails = () => {
                                         <div className="mt-auto pt-2">
                                             <Button
                                                 variant="default"
-                                                size="xs"
+                                                size="sm"
                                                 fullWidth
                                                 onClick={(e) => {
                                                     e.stopPropagation();
@@ -740,13 +743,15 @@ const ProductDetails = () => {
                                                     window.open(`https://wa.me/5511999999999?text=${message}`, '_blank');
                                                 }}
                                                 disabled={!relatedProduct.available}
-                                                className="bg-success hover:bg-success/90 text-xs py-2"
+                                                className="bg-primary hover:bg-accent text-white font-semibold py-2.5 rounded-xl"
                                             >
                                                 <div className="flex items-center justify-center space-x-1">
                                                     <span>{relatedProduct.available ? 'Comprar por' : 'Indisponível'}</span>
-                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                                    {relatedProduct.available && (
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
                                                     </svg>
+                                                    )}
                                                 </div>
                                             </Button>
                                         </div>
@@ -757,7 +762,7 @@ const ProductDetails = () => {
                     </div>
 
                     {/* Product Reviews Section - Full Width */}
-                    <div className="bg-muted/30 py-8">
+                    <div className="bg-gray-50 py-8">
                         <div className="container mx-auto px-4">
                             <ProductReviewsSection
                                 productId={product.id}
@@ -773,11 +778,11 @@ const ProductDetails = () => {
 
             {/* Image Modal */}
             {showImageModal && (
-                <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="relative w-full h-full flex items-center justify-center">
                         <button
                             onClick={() => setShowImageModal(false)}
-                            className="absolute top-6 right-6 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200 z-10"
+                            className="absolute top-6 right-6 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200 z-10"
                         >
                             <Icon name="X" size={24} />
                         </button>
@@ -793,13 +798,13 @@ const ProductDetails = () => {
                                 <>
                                     <button
                                         onClick={() => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)}
-                                        className="fixed left-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200"
+                                        className="fixed left-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200"
                                     >
                                         <Icon name="ChevronLeft" size={28} />
                                     </button>
                                     <button
                                         onClick={() => setCurrentImageIndex((prev) => (prev + 1) % images.length)}
-                                        className="fixed right-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200"
+                                        className="fixed right-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200"
                                     >
                                         <Icon name="ChevronRight" size={28} />
                                     </button>

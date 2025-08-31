@@ -27,12 +27,12 @@ const CategoryChips = ({ className = '' }) => {
                     <button
                         key={category?.id}
                         onClick={() => handleCategoryClick(category?.id)}
-                        className="flex flex-col items-center p-4 bg-card border border-border rounded-lg hover:shadow-md hover:border-primary/20 transition-all duration-200 group"
+                        className="flex flex-col items-center p-6 bg-white border-2 border-gray-200 hover:border-primary/50 rounded-2xl hover:shadow-lg transition-all duration-300 group transform hover:scale-105"
                     >
-                        <div className={`w-12 h-12 ${category?.bgColor} rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200`}>
+                        <div className={`w-16 h-16 ${category?.bgColor} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
                             <Icon name={category?.icon} size={24} className={category?.color} />
                         </div>
-                        <h3 className="font-body font-semibold text-sm text-foreground mb-1">
+                        <h3 className="font-bold text-sm text-gray-900 mb-1">
                             {category?.label}
                         </h3>
                     </button>

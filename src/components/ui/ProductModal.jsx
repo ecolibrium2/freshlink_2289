@@ -146,16 +146,16 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-card rounded-2xl shadow-modal max-w-6xl w-full max-h-[90vh] overflow-hidden animate-fade-in">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+            <div className="bg-white rounded-3xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden animate-scale-in border-2 border-gray-200">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-border">
-                    <h2 className="text-xl font-bold text-foreground">
+                <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 className="text-xl font-black text-gray-900">
                         Detalhes do Produto
                     </h2>
                     <button
                         onClick={onClose}
-                        className="w-10 h-10 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors duration-200"
+                        className="w-10 h-10 rounded-2xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors duration-200"
                     >
                         <X size={20} />
                     </button>
@@ -163,13 +163,13 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
 
                 <div className="flex flex-col lg:flex-row min-h-0">
                     {/* Image Section */}
-                    <div className="lg:w-3/5 p-6 bg-muted/30">
+                    <div className="lg:w-3/5 p-6 bg-gradient-to-br from-gray-50 to-gray-100">
                         {/* Main Image */}
                         <div className="relative"
                             onMouseEnter={() => setIsHovered(true)}
                             onMouseLeave={() => setIsHovered(false)}>
                             <div
-                                className="aspect-square bg-background rounded-xl overflow-hidden mb-4 cursor-zoom-in shadow-sm relative"
+                                className="aspect-square bg-white rounded-2xl overflow-hidden mb-4 cursor-zoom-in shadow-lg relative border-2 border-gray-200"
                                 onMouseMove={handleMouseMove}
                                 onMouseEnter={() => setIsZoomed(true)}
                                 onMouseLeave={() => setIsZoomed(false)}
@@ -194,15 +194,15 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
                                     <>
                                         <button
                                             onClick={prevImage}
-                                            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-background transition-all duration-200"
+                                            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg flex items-center justify-center hover:bg-white transition-all duration-200"
                                         >
-                                            <ChevronLeft size={20} className="text-foreground" />
+                                            <ChevronLeft size={20} className="text-gray-900" />
                                         </button>
                                         <button
                                             onClick={nextImage}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-background/80 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-background transition-all duration-200"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg flex items-center justify-center hover:bg-white transition-all duration-200"
                                         >
-                                            <ChevronRight size={20} className="text-foreground" />
+                                            <ChevronRight size={20} className="text-gray-900" />
                                         </button>
                                     </>
                                 )}
@@ -210,14 +210,14 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
 
                             {/* Thumbnail Images */}
                             {images.length > 1 && (
-                                <div className="flex space-x-3 justify-center">
+                                <div className="flex space-x-3 justify-center overflow-x-auto scrollbar-hide">
                                     {images.map((image, index) => (
                                         <button
                                             key={index}
                                             onClick={() => setCurrentImageIndex(index)}
-                                            className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-background shadow-sm ${index === currentImageIndex
-                                                ? 'border-primary ring-2 ring-primary/20'
-                                                : 'border-border hover:border-primary/50'
+                                            className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-white shadow-sm flex-shrink-0 ${index === currentImageIndex
+                                                ? 'border-primary ring-2 ring-primary/20 shadow-lg'
+                                                : 'border-gray-200 hover:border-primary/50'
                                                 }`}
                                         >
                                             <img
@@ -237,7 +237,7 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
                         <div className="space-y-6">
                             {/* Product Title and Rating */}
                             <div>
-                                <h1 className="text-3xl font-heading font-bold text-foreground mb-2">
+                                <h1 className="text-3xl font-black text-gray-900 mb-2">
                                     {displayProduct.name}
                                 </h1>
 
@@ -245,20 +245,20 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
                                     <div className="flex items-center space-x-1">
                                         {renderStars(displayProduct.rating || 4.6)}
                                     </div>
-                                    <span className="text-sm font-medium text-foreground">
+                                    <span className="text-sm font-bold text-gray-900">
                                         {(displayProduct.rating || 4.6).toFixed(1)}
                                     </span>
-                                    <span className="text-sm text-muted-foreground">
+                                    <span className="text-sm text-gray-500">
                                         ({displayProduct.reviewCount || 261} avaliações)
                                     </span>
                                 </div>
 
-                                <div className="flex items-center text-sm text-muted-foreground mb-4">
-                                    <span>Categoria: <span className="font-medium text-foreground">{displayProduct.category || 'Não informado'}</span></span>
+                                <div className="flex items-center text-sm text-gray-600 mb-4">
+                                    <span>Categoria: <span className="font-semibold text-gray-900">{displayProduct.category || 'Não informado'}</span></span>
                                     {(displayProduct.productType === 'organic' || displayProduct.productType === 'natural') && (
                                         <>
-                                            <div className="w-px h-4 bg-border mx-4"></div>
-                                            <span className={`font-medium ${getProductTypeColor(displayProduct.productType)}`}>
+                                            <div className="w-px h-4 bg-gray-300 mx-4"></div>
+                                            <span className="font-semibold text-green-600">
                                                 {getProductTypeLabel(displayProduct.productType)}
                                             </span>
                                         </>
@@ -266,10 +266,10 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
                                 </div>
 
                                 {displayProduct.description && (
-                                    <p className="text-muted-foreground leading-relaxed mb-6">
+                                    <p className="text-gray-600 leading-relaxed mb-6">
                                         {displayProduct.description}
                                         {displayProduct.description && displayProduct.description.length > 100 && (
-                                            <button className="text-primary hover:text-primary/80 font-medium ml-1">
+                                            <button className="text-primary hover:text-primary/80 font-semibold ml-1">
                                                 Read more
                                             </button>
                                         )}
@@ -277,25 +277,25 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
                                 )}
 
                                 <div className="flex items-center space-x-4 mb-6">
-                                    <div className="text-3xl font-heading font-bold text-primary">
+                                    <div className="text-3xl font-black text-primary">
                                         {formatPrice(displayProduct.price)}
                                     </div>
-                                    <div className="text-muted-foreground">
+                                    <div className="text-gray-600">
                                         por {displayProduct.unit}
                                     </div>
                                 </div>
 
-                                <div className="border-b"></div>
+                                <div className="border-b border-gray-200"></div>
                             </div>
 
                             {/* Vendor Info */}
                             {vendor && (
-                                <div className="bg-muted/50 rounded-xl p-2">
-                                    <h3 className="font-body font-semibold text-foreground mb-3">
+                                <div className="bg-gray-50 rounded-2xl p-6 border-2 border-gray-100">
+                                    <h3 className="font-bold text-gray-900 mb-3">
                                         Vendedor
                                     </h3>
                                     <div className="flex items-center space-x-3">
-                                        <div className="w-12 h-12 rounded-full overflow-hidden bg-muted">
+                                        <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
                                             <img
                                                 src={vendor?.image || 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=100&h=100&fit=crop'}
                                                 alt={vendor?.name}
@@ -303,8 +303,8 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
                                             />
                                         </div>
                                         <div className="flex-1">
-                                            <div className="font-medium text-foreground">{vendor?.name}</div>
-                                            <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                                            <div className="font-bold text-gray-900">{vendor?.name}</div>
+                                            <div className="flex items-center space-x-1 text-sm text-gray-600">
                                                 <MapPin size={14} />
                                                 <span>{vendor?.location}</span>
                                                 {vendor?.distance && (
@@ -316,8 +316,9 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
                                             </div>
                                         </div>
                                         <Button
-                                            variant="outline"
+                                            variant="default"
                                             size="sm"
+                                            className="bg-primary hover:bg-primary/90 text-white rounded-xl font-semibold"
                                         >
                                             Ver Perfil
                                         </Button>
@@ -326,23 +327,23 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
                             )}
 
                             {/* Action Buttons */}
-                            <div className="pt-4 border-border transition-all duration-200">
+                            <div className="pt-4 border-gray-200 transition-all duration-200">
                                 <div className="flex space-x-3">
                                     <Button
                                         variant="default"
-                                        size="sm"
+                                        size="lg"
                                         iconName="MessageCircle"
                                         onClick={handleWhatsAppContact}
-                                        className="bg-success hover:bg-success/90 flex-1 py-5"
+                                        className="bg-primary hover:bg-accent flex-1 py-4 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl"
                                     >
                                         Perguntar
                                     </Button>
                                     <Button
-                                        variant="ghost"
-                                        size="sm"
+                                        variant="outline"
+                                        size="lg"
                                         iconName="Share"
                                         onClick={handleShare}
-                                        className="text-muted-foreground border hover:bg-muted hover:text-foreground hover:border-primary/30 flex-1 py-5"
+                                        className="border-2 border-gray-200 hover:border-primary/50 flex-1 py-4 rounded-2xl font-semibold"
                                     >
                                         Compartilhar
                                     </Button>
@@ -352,13 +353,13 @@ const ProductModal = ({ product, vendor, isOpen, onClose, onFavoriteToggle = fal
                             {/* Product Details */}
                             {displayProduct.stock && (
                                 <div className="space-y-3">
-                                    <h3 className="font-body font-semibold text-foreground">
+                                    <h3 className="font-bold text-gray-900">
                                         Informações Adicionais
                                     </h3>
                                     <div className="grid grid-cols-2 gap-4 text-sm">
                                         <div>
-                                            <span className="text-muted-foreground">Estoque:</span>
-                                            <span className="ml-2 font-medium text-foreground">
+                                            <span className="text-gray-500">Estoque:</span>
+                                            <span className="ml-2 font-semibold text-gray-900">
                                                 {displayProduct.stock} unidades
                                             </span>
                                         </div>
