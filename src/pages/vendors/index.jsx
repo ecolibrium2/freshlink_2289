@@ -526,11 +526,6 @@ const VendorsPage = () => {
                         </span>
                     </div>
 
-                    {/* Descrição */}
-                    <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
-                        {vendor.description}
-                    </p>
-
                     {/* Categorias */}
                     <div className="flex flex-wrap gap-1">
                         {vendor.categoryLabels.slice(0, 3).map((category, index) => (
@@ -546,12 +541,6 @@ const VendorsPage = () => {
                                 +{vendor.categoryLabels.length - 3}
                             </span>
                         )}
-                    </div>
-
-                    {/* Info adicional */}
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>{vendor.productCount} produtos</span>
-                        <span>{vendor.deliveryTime}</span>
                     </div>
 
                     {/* Botão */}
