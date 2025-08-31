@@ -1,57 +1,69 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import ResponsiveHeader from '../../components/ui/ResponsiveHeader';
-import Footer from '../../components/ui/Footer';
-import LocationSelector from '../../components/ui/LocationSelector';
-import Icon from '../../components/AppIcon';
-import Image from '../../components/AppImage';
-import Button from '../../components/ui/shadcn/button';
-import Input from '../../components/ui/shadcn/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '../../components/ui/shadcn/select';
+import { 
+    Search, 
+    MapPin, 
+    Star, 
+    StarHalf, 
+    Clock, 
+    List, 
+    Grid3X3, 
+    ChevronLeft, 
+    ChevronRight, 
+    X, 
+    ArrowUpDown,
+    Store,
+    Apple,
+    Leaf,
+    Carrot,
+    Wheat,
+    Flower2,
+    Milk,
+    Beef,
+    Phone
+} from 'lucide-react';
 
 // Fix for default markers in react-leaflet
-import L from 'leaflet';
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+const L = window.L || {};
+if (L.Icon) {
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+        iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    });
+}
 
 // Custom marker icons
 const createCustomIcon = (vendor) => {
-  const color = vendor.isOpen ? '#10B981' : '#EF4444';
-  const svgIcon = `
-    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="16" r="14" fill="${color}" stroke="white" stroke-width="3"/>
-      <circle cx="16" cy="16" r="8" fill="white"/>
-    </svg>
-  `;
-  
-  return L.divIcon({
-    html: svgIcon,
-    className: 'custom-marker',
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-  });
+    const color = vendor.isOpen ? '#10B981' : '#EF4444';
+    const svgIcon = `
+        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="14" fill="${color}" stroke="white" stroke-width="3"/>
+            <circle cx="16" cy="16" r="8" fill="white"/>
+        </svg>
+    `;
+    
+    return L.divIcon ? L.divIcon({
+        html: svgIcon,
+        className: 'custom-marker',
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+    }) : null;
 };
 
 // Component to handle map events
 const MapController = ({ center }) => {
-  const map = useMap();
-  
-  useEffect(() => {
-    map.setView(center, map.getZoom());
-  }, [center, map]);
+    const map = useMap();
+    
+    useEffect(() => {
+        if (map && center) {
+            map.setView(center, map.getZoom());
+        }
+    }, [center, map]);
 
-  return null;
+    return null;
 };
 
 const VendorsMap = () => {
@@ -61,7 +73,7 @@ const VendorsMap = () => {
     const [mapCenter, setMapCenter] = useState({ lat: -23.5505, lng: -46.6333 });
     const [userLocation, setUserLocation] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [currentLocation, setCurrentLocation] = useState({ id: 1, name: "São Paulo, SP", distance: "Atual" });
+    const [currentLocation, setCurrentLocation] = useState('São Paulo, SP');
     const [sortBy, setSortBy] = useState('distance');
     const [activeCategory, setActiveCategory] = useState('all');
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
@@ -73,14 +85,14 @@ const VendorsMap = () => {
     const [showCategoryArrows, setShowCategoryArrows] = useState(false);
 
     const categories = [
-        { id: 'all', label: 'Todos', icon: 'Grid3X3' },
-        { id: 'organicos', label: 'Orgânicos', icon: 'Leaf' },
-        { id: 'frutas', label: 'Frutas', icon: 'Apple' },
-        { id: 'verduras', label: 'Verduras', icon: 'Carrot' },
-        { id: 'legumes', label: 'Legumes', icon: 'Wheat' },
-        { id: 'temperos', label: 'Temperos', icon: 'Flower2' },
-        { id: 'laticinios', label: 'Laticínios', icon: 'Milk' },
-        { id: 'carnes', label: 'Carnes', icon: 'Beef' }
+        { id: 'all', label: 'Todos', icon: Grid3X3 },
+        { id: 'organicos', label: 'Orgânicos', icon: Leaf },
+        { id: 'frutas', label: 'Frutas', icon: Apple },
+        { id: 'verduras', label: 'Verduras', icon: Carrot },
+        { id: 'legumes', label: 'Legumes', icon: Wheat },
+        { id: 'temperos', label: 'Temperos', icon: Flower2 },
+        { id: 'laticinios', label: 'Laticínios', icon: Milk },
+        { id: 'carnes', label: 'Carnes', icon: Beef }
     ];
 
     const sortOptions = [
@@ -89,6 +101,14 @@ const VendorsMap = () => {
         { value: 'name', label: 'Nome A-Z' },
         { value: 'products', label: 'Mais produtos' },
         { value: 'reviews', label: 'Mais avaliações' }
+    ];
+
+    const locationOptions = [
+        { value: 'sao-paulo', label: 'São Paulo, SP' },
+        { value: 'rio-janeiro', label: 'Rio de Janeiro, RJ' },
+        { value: 'belo-horizonte', label: 'Belo Horizonte, MG' },
+        { value: 'salvador', label: 'Salvador, BA' },
+        { value: 'curitiba', label: 'Curitiba, PR' }
     ];
 
     // Mock vendors data with coordinates
@@ -185,54 +205,6 @@ const VendorsMap = () => {
         }
     ];
 
-    // Header visibility tracking
-    useEffect(() => {
-        const controlHeader = () => {
-            const currentScrollY = window.scrollY;
-            
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                setIsHeaderVisible(false);
-            } else if (currentScrollY < lastScrollY) {
-                setIsHeaderVisible(true);
-            }
-            
-            if (currentScrollY < 10) {
-                setIsHeaderVisible(true);
-            }
-            
-            setLastScrollY(currentScrollY);
-        };
-
-        let ticking = false;
-        const handleScroll = () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    controlHeader();
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [lastScrollY]);
-
-    // Check if category arrows are needed
-    useEffect(() => {
-        const checkCategoryOverflow = () => {
-            if (categoriesRef.current) {
-                const container = categoriesRef.current;
-                const isOverflowing = container.scrollWidth > container.clientWidth;
-                setShowCategoryArrows(isOverflowing);
-            }
-        };
-
-        checkCategoryOverflow();
-        window.addEventListener('resize', checkCategoryOverflow);
-        return () => window.removeEventListener('resize', checkCategoryOverflow);
-    }, []);
-
     useEffect(() => {
         setVendors(mockVendors);
         setFilteredVendors(mockVendors);
@@ -312,10 +284,6 @@ const VendorsMap = () => {
         setSearchQuery('');
     };
 
-    const handleLocationChange = (location) => {
-        setCurrentLocation(location);
-    };
-
     const handleWhatsAppContact = (vendor, e) => {
         e?.stopPropagation();
         const message = encodeURIComponent(`Olá ${vendor.name}! Vi seu perfil no FreshLink e gostaria de saber mais sobre seus produtos.`);
@@ -328,16 +296,6 @@ const VendorsMap = () => {
         window.open(`/perfil-vendedor/${vendor.id}`, '_blank');
     };
 
-    const scrollCategories = (direction) => {
-        if (categoriesRef.current) {
-            const scrollAmount = 200;
-            categoriesRef.current.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
-                behavior: 'smooth'
-            });
-        }
-    };
-
     const renderStars = (rating) => {
         const stars = [];
         const fullStars = Math.floor(rating);
@@ -345,19 +303,19 @@ const VendorsMap = () => {
 
         for (let i = 0; i < fullStars; i++) {
             stars.push(
-                <Icon key={i} name="Star" size={14} className="text-yellow-400 fill-current" />
+                <Star key={i} size={14} className="text-yellow-400 fill-current" />
             );
         }
 
         if (hasHalfStar && stars.length < 5) {
             stars.push(
-                <Icon key="half" name="StarHalf" size={14} className="text-yellow-400 fill-current" />
+                <StarHalf key="half" size={14} className="text-yellow-400 fill-current" />
             );
         }
 
         while (stars.length < 5) {
             stars.push(
-                <Icon key={`empty-${stars.length}`} name="Star" size={14} className="text-gray-300" />
+                <Star key={`empty-${stars.length}`} size={14} className="text-gray-300" />
             );
         }
 
@@ -366,14 +324,16 @@ const VendorsMap = () => {
 
     const VendorCard = ({ vendor }) => (
         <div 
-            className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md hover:shadow-gray-900/10 transition-all duration-300 cursor-pointer group"
+            className={`bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300 cursor-pointer group ${
+                selectedVendor?.id === vendor.id ? 'ring-2 ring-blue-500 border-blue-500' : ''
+            }`}
             onClick={() => handleVendorClick(vendor)}
         >
-            <div className="p-4">
+            <div className="p-6">
                 <div className="flex items-start space-x-4">
                     {/* Vendor Image */}
-                    <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex-shrink-0">
-                        <Image
+                    <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex-shrink-0">
+                        <img
                             src={vendor.image}
                             alt={vendor.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -386,15 +346,15 @@ const VendorsMap = () => {
                     
                     <div className="flex-1 min-w-0">
                         {/* Vendor name and location */}
-                        <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-start justify-between mb-3">
                             <div className="flex-1 min-w-0">
-                                <h3 className="font-bold text-gray-900 text-base leading-tight line-clamp-1 group-hover:text-primary transition-colors duration-200">
+                                <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1 group-hover:text-blue-600 transition-colors duration-200">
                                     {vendor.name}
                                 </h3>
-                                <div className="flex items-center space-x-2 mt-1">
-                                    <Icon name="MapPin" size={14} className="text-gray-400 flex-shrink-0" />
-                                    <span className="text-sm text-gray-600 line-clamp-1">{vendor.location}</span>
-                                    <span className="text-sm font-medium text-primary">• {vendor.distance}km</span>
+                                <div className="flex items-center space-x-2">
+                                    <MapPin size={14} className="text-gray-400 flex-shrink-0" />
+                                    <span className="text-sm text-gray-600">{vendor.location}</span>
+                                    <span className="text-sm font-semibold text-blue-600">• {vendor.distance}km</span>
                                 </div>
                             </div>
                             
@@ -418,38 +378,35 @@ const VendorsMap = () => {
                         </div>
                         
                         {/* Categories */}
-                        <div className="flex flex-wrap gap-1 mb-3">
+                        <div className="flex flex-wrap gap-2 mb-4">
                             {vendor.categories.slice(0, 3).map((category, index) => (
                                 <span
                                     key={index}
-                                    className="inline-flex items-center px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded-md font-medium"
+                                    className="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-medium"
                                 >
                                     {category}
                                 </span>
                             ))}
                         </div>
                         
+                        {/* Description */}
+                        <p className="text-gray-600 text-sm mb-4">{vendor.description}</p>
+                        
                         {/* Action buttons */}
-                        <div className="flex space-x-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
+                        <div className="flex space-x-3">
+                            <button
                                 onClick={(e) => handleVendorProfileClick(vendor, e)}
-                                className="flex-1 text-sm font-semibold rounded-lg hover:bg-gray-50 hover:border-primary/30 hover:text-primary transition-all duration-200"
+                                className="flex-1 px-4 py-2 text-sm font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 hover:border-blue-300 transition-all duration-200"
                             >
                                 Ver Produtos
-                            </Button>
-                            <Button
-                                variant="default"
-                                size="sm"
+                            </button>
+                            <button
                                 onClick={(e) => handleWhatsAppContact(vendor, e)}
-                                className="bg-primary hover:bg-accent text-white font-semibold rounded-lg flex items-center space-x-1 transition-all duration-200"
+                                className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg flex items-center space-x-2 transition-all duration-200"
                             >
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
-                                </svg>
+                                <Phone size={16} />
                                 <span>WhatsApp</span>
-                            </Button>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -457,152 +414,199 @@ const VendorsMap = () => {
         </div>
     );
 
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-col">
-            <ResponsiveHeader />
-            
-            <main className="pt-16 flex-1 flex flex-col">
-                {/* Modern Fixed Search and Filter Bar */}
-                <div className={`bg-white border-b border-gray-200/50 sticky z-40 transition-all duration-300 ease-in-out shadow-sm ${
-                    isHeaderVisible ? 'top-16' : 'top-0'
+    const VendorGridCard = ({ vendor }) => (
+        <div 
+            className={`bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300 cursor-pointer group ${
+                selectedVendor?.id === vendor.id ? 'ring-2 ring-blue-500 border-blue-500' : ''
+            }`}
+            onClick={() => handleVendorClick(vendor)}
+        >
+            <div className="relative h-40 bg-gradient-to-br from-gray-50 to-gray-100">
+                <img
+                    src={vendor.image}
+                    alt={vendor.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className={`absolute top-3 right-3 w-3 h-3 rounded-full border-2 border-white ${
+                    vendor.isOpen ? 'bg-green-500' : 'bg-red-500'
+                }`} />
+                <div className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-semibold ${
+                    vendor.isOpen 
+                        ? 'bg-green-50/90 text-green-700 border border-green-200/50' 
+                        : 'bg-red-50/90 text-red-700 border border-red-200/50'
                 }`}>
-                    <div className="container mx-auto px-4 py-4">
-                        {/* Categories with modern styling */}
-                        <div className="relative mb-4">
-                            {showCategoryArrows && (
-                                <button
-                                    onClick={() => scrollCategories('left')}
-                                    className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-200"
-                                >
-                                    <Icon name="ChevronLeft" size={18} />
-                                </button>
-                            )}
+                    {vendor.isOpen ? 'Aberto' : 'Fechado'}
+                </div>
+            </div>
+            
+            <div className="p-4">
+                <h3 className="font-bold text-gray-900 text-base mb-2 group-hover:text-blue-600 transition-colors duration-200">
+                    {vendor.name}
+                </h3>
+                
+                <div className="flex items-center space-x-2 mb-2">
+                    <MapPin size={12} className="text-gray-400 flex-shrink-0" />
+                    <span className="text-xs text-gray-600">{vendor.location}</span>
+                    <span className="text-xs font-semibold text-blue-600">• {vendor.distance}km</span>
+                </div>
+                
+                <div className="flex items-center space-x-2 mb-3">
+                    <div className="flex items-center space-x-1">{renderStars(vendor.rating).slice(0, 5)}</div>
+                    <span className="text-xs font-bold text-gray-900">{vendor.rating.toFixed(1)}</span>
+                    <span className="text-xs text-gray-500">({vendor.reviewCount})</span>
+                </div>
+                
+                <div className="flex flex-wrap gap-1 mb-3">
+                    {vendor.categories.slice(0, 2).map((category, index) => (
+                        <span
+                            key={index}
+                            className="inline-flex items-center px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-md font-medium"
+                        >
+                            {category}
+                        </span>
+                    ))}
+                </div>
+                
+                <div className="flex space-x-2">
+                    <button
+                        onClick={(e) => handleVendorProfileClick(vendor, e)}
+                        className="flex-1 px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-all duration-200"
+                    >
+                        Ver Produtos
+                    </button>
+                    <button
+                        onClick={(e) => handleWhatsAppContact(vendor, e)}
+                        className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-all duration-200"
+                    >
+                        <Phone size={14} />
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
 
-                            <div
-                                ref={categoriesRef}
-                                className="flex space-x-3 overflow-x-auto scrollbar-hide pb-1"
-                                style={{
-                                    paddingLeft: showCategoryArrows ? '3rem' : '0',
-                                    paddingRight: showCategoryArrows ? '3rem' : '0'
-                                }}
-                            >
-                                {categories.map((category) => (
-                                    <button
-                                        key={category.id}
-                                        onClick={() => setActiveCategory(category.id)}
-                                        className={`flex items-center space-x-3 px-6 py-3 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all duration-300 shadow-sm hover:shadow-md border ${
-                                            activeCategory === category.id
-                                                ? 'bg-primary text-white border-primary shadow-primary/25 hover:shadow-primary/40'
-                                                : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:text-primary hover:border-primary/30 hover:shadow-lg'
-                                        }`}
-                                    >
-                                        <Icon name={category.icon} size={18} />
-                                        <span>{category.label}</span>
-                                    </button>
-                                ))}
+    return (
+        <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+                <div className="max-w-7xl mx-auto px-4 py-4">
+                    <h1 className="text-2xl font-bold text-gray-900">FreshLink - Mapa de Vendedores</h1>
+                </div>
+            </header>
+            
+            <main className="max-w-7xl mx-auto px-4 py-6">
+                {/* Filter Bar */}
+                <div className="bg-white border border-gray-200 rounded-xl shadow-sm mb-6">
+                    <div className="p-6">
+                        {/* Categories */}
+                        <div className="mb-6">
+                            <div className="flex space-x-3 overflow-x-auto pb-2">
+                                {categories.map((category) => {
+                                    const IconComponent = category.icon;
+                                    return (
+                                        <button
+                                            key={category.id}
+                                            onClick={() => setActiveCategory(category.id)}
+                                            className={`flex items-center space-x-2 px-4 py-3 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-200 border ${
+                                                activeCategory === category.id
+                                                    ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                                    : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                                            }`}
+                                        >
+                                            <IconComponent size={18} />
+                                            <span>{category.label}</span>
+                                        </button>
+                                    );
+                                })}
                             </div>
-
-                            {showCategoryArrows && (
-                                <button
-                                    onClick={() => scrollCategories('right')}
-                                    className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-200"
-                                >
-                                    <Icon name="ChevronRight" size={18} />
-                                </button>
-                            )}
                         </div>
 
-                        {/* Search and Filter controls */}
-                        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
-                            {/* Enhanced Search Bar */}
+                        {/* Search and Controls */}
+                        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
+                            {/* Search Bar */}
                             <div className="flex-1 lg:max-w-md">
                                 <div className="relative">
-                                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                        <Icon name="Search" size={20} />
-                                    </div>
-                                    <Input
+                                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                    <input
                                         type="text"
                                         placeholder="Buscar vendedores..."
                                         value={searchQuery}
                                         onChange={(e) => handleSearch(e.target.value)}
-                                        className="pl-12 pr-12 py-3 bg-white border-gray-200 rounded-2xl shadow-sm hover:shadow-md focus:shadow-md placeholder:text-gray-400"
+                                        className="w-full pl-10 pr-10 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     />
                                     {searchQuery && (
                                         <button
                                             onClick={handleClearSearch}
-                                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1 hover:bg-gray-100 rounded-full"
+                                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                                         >
-                                            <Icon name="X" size={16} />
+                                            <X size={16} />
                                         </button>
                                     )}
                                 </div>
                             </div>
 
-                            {/* Filter Controls */}
-                            <div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">
+                            {/* Controls */}
+                            <div className="flex items-center gap-3">
                                 {/* Sort Select */}
-                                <div className="min-w-[140px] lg:min-w-[190px] flex-1 lg:flex-none">
-                                    <Select value={sortBy} onValueChange={setSortBy}>
-                                        <SelectTrigger className="bg-white border-gray-200 rounded-2xl shadow-sm hover:shadow-md focus:shadow-lg transition-all duration-200 py-3 font-medium">
-                                            <div className="flex items-center space-x-2">
-                                                <Icon name="ArrowUpDown" size={18} className="text-primary" />
-                                                <SelectValue placeholder="Ordenar por..." />
-                                            </div>
-                                        </SelectTrigger>
-                                        <SelectContent className="bg-white border-gray-200 rounded-xl shadow-xl">
-                                            {sortOptions.map((option) => (
-                                                <SelectItem
-                                                    key={option.value}
-                                                    value={option.value}
-                                                    className="py-3 px-8 hover:bg-gray-50 focus:bg-primary/10 focus:text-primary rounded-md transition-colors duration-200"
-                                                >
-                                                    {option.label}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                <select
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                    className="px-4 py-3 border border-gray-200 rounded-xl bg-white font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                >
+                                    {sortOptions.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
 
                                 {/* Location Selector */}
-                                <LocationSelector
-                                    currentLocation={currentLocation}
-                                    onLocationChange={handleLocationChange}
-                                />
+                                <select
+                                    value={currentLocation}
+                                    onChange={(e) => setCurrentLocation(e.target.value)}
+                                    className="px-4 py-3 border border-gray-200 rounded-xl bg-white font-medium focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                >
+                                    {locationOptions.map((option) => (
+                                        <option key={option.value} value={option.label}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
 
                                 {/* View Mode Toggle */}
-                                <div className="flex bg-white border border-gray-200 rounded-2xl p-1 shadow-sm">
+                                <div className="flex bg-white border border-gray-200 rounded-xl p-1">
                                     <button
                                         onClick={() => setViewMode('list')}
-                                        className={`flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200 ${
+                                        className={`flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ${
                                             viewMode === 'list'
-                                                ? 'bg-primary text-white shadow-sm'
-                                                : 'text-gray-500 hover:text-primary hover:bg-gray-50'
+                                                ? 'bg-blue-500 text-white'
+                                                : 'text-gray-500 hover:text-blue-500 hover:bg-blue-50'
                                         }`}
                                     >
-                                        <Icon name="List" size={18} />
+                                        <List size={18} />
                                     </button>
                                     <button
                                         onClick={() => setViewMode('grid')}
-                                        className={`flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200 ${
+                                        className={`flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ${
                                             viewMode === 'grid'
-                                                ? 'bg-primary text-white shadow-sm'
-                                                : 'text-gray-500 hover:text-primary hover:bg-gray-50'
+                                                ? 'bg-blue-500 text-white'
+                                                : 'text-gray-500 hover:text-blue-500 hover:bg-blue-50'
                                         }`}
                                     >
-                                        <Icon name="Grid3X3" size={18} />
+                                        <Grid3X3 size={18} />
                                     </button>
                                 </div>
 
                                 {/* Only Open Filter */}
                                 <button
                                     onClick={() => setOnlyOpen(!onlyOpen)}
-                                    className={`flex items-center space-x-2 px-4 py-3 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all duration-300 shadow-sm hover:shadow-md border ${
+                                    className={`flex items-center space-x-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 border ${
                                         onlyOpen
-                                            ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
-                                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:text-primary hover:border-primary/30'
+                                            ? 'bg-green-50 text-green-700 border-green-200'
+                                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
                                     }`}
                                 >
-                                    <Icon name="Clock" size={18} />
+                                    <Clock size={18} />
                                     <span>Apenas abertos</span>
                                 </button>
                             </div>
@@ -610,201 +614,202 @@ const VendorsMap = () => {
                     </div>
                 </div>
 
-                <div className="flex-1 flex">
-                    {/* Vendors List/Grid Sidebar */}
-                    <div className="w-96 bg-white border-r border-gray-200 overflow-y-auto">
-                        <div className="p-4">
-                            {/* Results header */}
-                            <div className="mb-6">
-                                <h2 className="text-xl font-bold text-gray-900 mb-1">
-                                    {activeCategory === 'all' ? 'Todos os Vendedores' : categories.find(c => c.id === activeCategory)?.label}
-                                </h2>
-                                <p className="text-gray-600 font-medium">
-                                    {filteredVendors.length} {filteredVendors.length === 1 ? 'vendedor encontrado' : 'vendedores encontrados'}
-                                    {searchQuery && <span className="text-primary"> para "{searchQuery}"</span>}
-                                    {onlyOpen && <span className="text-green-600"> • Apenas abertos</span>}
-                                </p>
-                            </div>
-                            
-                            {/* Vendors List */}
-                            <div className="space-y-4">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Vendors List/Grid */}
+                    <div className="lg:col-span-2">
+                        <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
+                            <div className="p-6">
+                                {/* Results header */}
+                                <div className="mb-6">
+                                    <h2 className="text-xl font-bold text-gray-900 mb-1">
+                                        {activeCategory === 'all' ? 'Todos os Vendedores' : categories.find(c => c.id === activeCategory)?.label}
+                                    </h2>
+                                    <p className="text-gray-600">
+                                        {filteredVendors.length} {filteredVendors.length === 1 ? 'vendedor encontrado' : 'vendedores encontrados'}
+                                        {searchQuery && <span className="text-blue-600"> para "{searchQuery}"</span>}
+                                    </p>
+                                </div>
+                                
+                                {/* Vendors List/Grid */}
                                 {filteredVendors.length === 0 ? (
                                     <div className="text-center py-12">
-                                        <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
-                                            <Icon name="Store" size={24} className="text-gray-400" />
-                                        </div>
+                                        <Store size={48} className="text-gray-400 mx-auto mb-4" />
                                         <h3 className="text-lg font-bold text-gray-900 mb-2">
                                             Nenhum vendedor encontrado
                                         </h3>
                                         <p className="text-gray-600 mb-4">
                                             Não encontramos vendedores que correspondam aos seus critérios.
                                         </p>
-                                        <div className="flex flex-col gap-2">
-                                            <Button
+                                        <div className="flex flex-col gap-2 max-w-sm mx-auto">
+                                            <button
                                                 onClick={handleClearSearch}
-                                                variant="outline"
-                                                className="rounded-xl font-medium"
+                                                className="px-4 py-2 text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 font-medium"
                                             >
                                                 Limpar busca
-                                            </Button>
-                                            <Button
+                                            </button>
+                                            <button
                                                 onClick={() => setActiveCategory('all')}
-                                                className="rounded-xl font-medium bg-primary hover:bg-primary/90"
+                                                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
                                             >
                                                 Ver todos os vendedores
-                                            </Button>
+                                            </button>
                                         </div>
                                     </div>
                                 ) : (
-                                    filteredVendors.map((vendor) => (
-                                        <div
-                                            key={vendor.id}
-                                            className={`transition-all duration-200 ${
-                                                selectedVendor?.id === vendor.id ? 'ring-2 ring-primary/20 rounded-xl' : ''
-                                            }`}
-                                        >
-                                            <VendorCard vendor={vendor} />
-                                        </div>
-                                    ))
+                                    <div className={viewMode === 'grid' 
+                                        ? 'grid grid-cols-1 md:grid-cols-2 gap-4' 
+                                        : 'space-y-4'
+                                    }>
+                                        {filteredVendors.map((vendor) => (
+                                            <div key={vendor.id}>
+                                                {viewMode === 'grid' ? (
+                                                    <VendorGridCard vendor={vendor} />
+                                                ) : (
+                                                    <VendorCard vendor={vendor} />
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
                                 )}
                             </div>
                         </div>
                     </div>
 
                     {/* Map Container */}
-                    <div className="flex-1 relative">
-                        <MapContainer
-                            center={[mapCenter.lat, mapCenter.lng]}
-                            zoom={13}
-                            style={{ height: '100%', width: '100%' }}
-                            className="z-10"
-                        >
-                            <TileLayer
-                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            />
-                            
-                            <MapController center={[mapCenter.lat, mapCenter.lng]} />
-                            
-                            {/* User Location Marker */}
-                            {userLocation && (
-                                <Marker
-                                    position={[userLocation.lat, userLocation.lng]}
-                                    icon={L.divIcon({
-                                        html: `
-                                            <div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg animate-pulse"></div>
-                                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-blue-500/20 rounded-full animate-ping"></div>
-                                        `,
-                                        className: 'user-location-marker',
-                                        iconSize: [16, 16],
-                                        iconAnchor: [8, 8],
+                    <div className="lg:col-span-1">
+                        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                            <div className="h-96 lg:h-[600px] relative">
+                                <MapContainer
+                                    center={[mapCenter.lat, mapCenter.lng]}
+                                    zoom={13}
+                                    style={{ height: '100%', width: '100%' }}
+                                    className="z-10"
+                                >
+                                    <TileLayer
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                    
+                                    <MapController center={[mapCenter.lat, mapCenter.lng]} />
+                                    
+                                    {/* User Location Marker */}
+                                    {userLocation && L.divIcon && (
+                                        <Marker
+                                            position={[userLocation.lat, userLocation.lng]}
+                                            icon={L.divIcon({
+                                                html: `
+                                                    <div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg animate-pulse"></div>
+                                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-blue-500/20 rounded-full animate-ping"></div>
+                                                `,
+                                                className: 'user-location-marker',
+                                                iconSize: [16, 16],
+                                                iconAnchor: [8, 8],
+                                            })}
+                                        >
+                                            <Popup>
+                                                <div className="text-center p-2">
+                                                    <div className="flex items-center space-x-2">
+                                                        <MapPin size={16} className="text-blue-500" />
+                                                        <span className="font-semibold text-gray-900">Sua localização</span>
+                                                    </div>
+                                                </div>
+                                            </Popup>
+                                        </Marker>
+                                    )}
+                                    
+                                    {/* Vendor Markers */}
+                                    {filteredVendors.map((vendor) => {
+                                        const icon = createCustomIcon(vendor);
+                                        return icon ? (
+                                            <Marker
+                                                key={vendor.id}
+                                                position={[vendor.coordinates.lat, vendor.coordinates.lng]}
+                                                icon={icon}
+                                                eventHandlers={{
+                                                    click: () => handleVendorClick(vendor),
+                                                }}
+                                            >
+                                                <Popup>
+                                                    <div className="p-3 min-w-72">
+                                                        <div className="flex items-start space-x-3">
+                                                            <div className="w-14 h-14 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex-shrink-0">
+                                                                <img
+                                                                    src={vendor.image}
+                                                                    alt={vendor.name}
+                                                                    className="w-full h-full object-cover"
+                                                                />
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <h3 className="font-bold text-gray-900 text-base mb-1">
+                                                                    {vendor.name}
+                                                                </h3>
+                                                                <div className="flex items-center space-x-2 mb-2">
+                                                                    <MapPin size={12} className="text-gray-400 flex-shrink-0" />
+                                                                    <span className="text-xs text-gray-600">{vendor.location}</span>
+                                                                    <span className="text-xs font-semibold text-blue-600">• {vendor.distance}km</span>
+                                                                </div>
+                                                                <div className="flex items-center space-x-2 mb-2">
+                                                                    <div className="flex items-center space-x-1">{renderStars(vendor.rating).slice(0, 5)}</div>
+                                                                    <span className="text-xs font-bold text-gray-900">{vendor.rating.toFixed(1)}</span>
+                                                                    <span className="text-xs text-gray-500">({vendor.reviewCount})</span>
+                                                                </div>
+                                                                <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold mb-3 ${
+                                                                    vendor.isOpen 
+                                                                        ? 'bg-green-50 text-green-700 border border-green-200' 
+                                                                        : 'bg-red-50 text-red-700 border border-red-200'
+                                                                }`}>
+                                                                    {vendor.isOpen ? 'Aberto' : 'Fechado'}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <p className="text-sm text-gray-600 mb-3">{vendor.description}</p>
+                                                        
+                                                        <div className="flex space-x-2">
+                                                            <button
+                                                                onClick={(e) => handleVendorProfileClick(vendor, e)}
+                                                                className="flex-1 px-3 py-2 text-sm font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100"
+                                                            >
+                                                                Ver Produtos
+                                                            </button>
+                                                            <button
+                                                                onClick={(e) => handleWhatsAppContact(vendor, e)}
+                                                                className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg flex items-center space-x-1"
+                                                            >
+                                                                <Phone size={14} />
+                                                                <span>WhatsApp</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </Popup>
+                                            </Marker>
+                                        ) : null;
                                     })}
-                                >
-                                    <Popup>
-                                        <div className="text-center p-2">
-                                            <div className="flex items-center space-x-2">
-                                                <Icon name="MapPin" size={16} className="text-blue-500" />
-                                                <span className="font-semibold text-gray-900">Sua localização</span>
-                                            </div>
-                                        </div>
-                                    </Popup>
-                                </Marker>
-                            )}
-                            
-                            {/* Vendor Markers */}
-                            {filteredVendors.map((vendor) => (
-                                <Marker
-                                    key={vendor.id}
-                                    position={[vendor.coordinates.lat, vendor.coordinates.lng]}
-                                    icon={createCustomIcon(vendor)}
-                                    eventHandlers={{
-                                        click: () => handleVendorClick(vendor),
-                                    }}
-                                >
-                                    <Popup>
-                                        <div className="p-3 min-w-72">
-                                            <div className="flex items-start space-x-3">
-                                                <div className="w-14 h-14 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex-shrink-0">
-                                                    <Image
-                                                        src={vendor.image}
-                                                        alt={vendor.name}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <h3 className="font-bold text-gray-900 text-base mb-1 line-clamp-1">
-                                                        {vendor.name}
-                                                    </h3>
-                                                    <div className="flex items-center space-x-2 mb-2">
-                                                        <Icon name="MapPin" size={12} className="text-gray-400 flex-shrink-0" />
-                                                        <span className="text-xs text-gray-600 line-clamp-1">{vendor.location}</span>
-                                                        <span className="text-xs font-semibold text-primary">• {vendor.distance}km</span>
-                                                    </div>
-                                                    <div className="flex items-center space-x-2 mb-2">
-                                                        <div className="flex items-center space-x-1">{renderStars(vendor.rating).slice(0, 5)}</div>
-                                                        <span className="text-xs font-bold text-gray-900">{vendor.rating.toFixed(1)}</span>
-                                                        <span className="text-xs text-gray-500">({vendor.reviewCount})</span>
-                                                    </div>
-                                                    <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold mb-3 ${
-                                                        vendor.isOpen 
-                                                            ? 'bg-green-50 text-green-700 border border-green-200' 
-                                                            : 'bg-red-50 text-red-700 border border-red-200'
-                                                    }`}>
-                                                        {vendor.isOpen ? 'Aberto' : 'Fechado'}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <p className="text-sm text-gray-600 mb-3 line-clamp-2">{vendor.description}</p>
-                                            
-                                            <div className="flex space-x-2">
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={(e) => handleVendorProfileClick(vendor, e)}
-                                                    className="flex-1 text-sm font-semibold rounded-lg"
-                                                >
-                                                    Ver Produtos
-                                                </Button>
-                                                <Button
-                                                    variant="default"
-                                                    size="sm"
-                                                    onClick={(e) => handleWhatsAppContact(vendor, e)}
-                                                    className="bg-primary hover:bg-accent text-white font-semibold rounded-lg flex items-center space-x-1"
-                                                >
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
-                                                    </svg>
-                                                    <span>WhatsApp</span>
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </Popup>
-                                </Marker>
-                            ))}
-                        </MapContainer>
+                                </MapContainer>
 
-                        {/* Map Controls */}
-                        <div className="absolute top-4 right-4 z-20 flex flex-col space-y-2">
-                            <button
-                                onClick={() => setMapCenter(userLocation || { lat: -23.5505, lng: -46.6333 })}
-                                className="w-12 h-12 bg-white border border-gray-200 rounded-xl shadow-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-200 flex items-center justify-center"
-                                title="Centralizar no meu local"
-                            >
-                                <Icon name="MapPin" size={20} className="text-primary" />
-                            </button>
+                                {/* Map Controls */}
+                                <div className="absolute top-4 right-4 z-20">
+                                    <button
+                                        onClick={() => setMapCenter(userLocation || { lat: -23.5505, lng: -46.6333 })}
+                                        className="w-10 h-10 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-50 hover:shadow-lg transition-all duration-200 flex items-center justify-center"
+                                        title="Centralizar no meu local"
+                                    >
+                                        <MapPin size={18} className="text-blue-600" />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Selected Vendor Details Bottom Bar */}
                 {selectedVendor && (
-                    <div className="bg-white border-t border-gray-200 shadow-lg">
-                        <div className="container mx-auto px-4 py-4">
+                    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
+                        <div className="max-w-7xl mx-auto px-4 py-4">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-4">
                                     <div className="w-16 h-16 rounded-xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
-                                        <Image
+                                        <img
                                             src={selectedVendor.image}
                                             alt={selectedVendor.name}
                                             className="w-full h-full object-cover"
@@ -816,11 +821,11 @@ const VendorsMap = () => {
                                         </h3>
                                         <div className="flex items-center space-x-3 text-sm text-gray-600 mb-1">
                                             <div className="flex items-center space-x-1">
-                                                <Icon name="MapPin" size={14} />
+                                                <MapPin size={14} />
                                                 <span>{selectedVendor.location}</span>
                                             </div>
                                             <span>•</span>
-                                            <span className="font-semibold text-primary">{selectedVendor.distance}km</span>
+                                            <span className="font-semibold text-blue-600">{selectedVendor.distance}km</span>
                                             <span>•</span>
                                             <span className={selectedVendor.isOpen ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}>
                                                 {selectedVendor.isOpen ? 'Aberto' : 'Fechado'}
@@ -838,27 +843,24 @@ const VendorsMap = () => {
                                 </div>
                                 
                                 <div className="flex items-center space-x-3">
-                                    <Button
-                                        variant="outline"
+                                    <button
                                         onClick={(e) => handleVendorProfileClick(selectedVendor, e)}
-                                        className="font-semibold rounded-xl"
+                                        className="px-4 py-2 text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 font-semibold"
                                     >
                                         Ver Produtos
-                                    </Button>
-                                    <Button
+                                    </button>
+                                    <button
                                         onClick={(e) => handleWhatsAppContact(selectedVendor, e)}
-                                        className="bg-primary hover:bg-accent text-white font-semibold rounded-xl flex items-center space-x-2"
+                                        className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg flex items-center space-x-2"
                                     >
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
-                                        </svg>
+                                        <Phone size={18} />
                                         <span>Contatar no WhatsApp</span>
-                                    </Button>
+                                    </button>
                                     <button
                                         onClick={() => setSelectedVendor(null)}
-                                        className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors duration-200"
+                                        className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
                                     >
-                                        <Icon name="X" size={18} className="text-gray-600" />
+                                        <X size={18} className="text-gray-600" />
                                     </button>
                                 </div>
                             </div>
@@ -866,8 +868,6 @@ const VendorsMap = () => {
                     </div>
                 )}
             </main>
-            
-            <Footer />
         </div>
     );
 };
