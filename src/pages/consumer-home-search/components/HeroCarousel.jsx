@@ -33,25 +33,62 @@ const HeroCarousel = ({ className = '' }) => {
         },
         {
             id: 3,
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="container mx-auto px-8">
-                                <div className="max-w-xl text-white">
-                                    <h2 className="text-3xl md:text-4xl font-black mb-4 leading-tight">
-                                        {slide.title}
-                                    </h2>
-                                    <p className="text-base md:text-lg font-medium mb-8 opacity-95 leading-relaxed">
-                                        {slide.subtitle}
-                                    </p>
-                                    <Button
-                                        onClick={slide.ctaAction}
-                                        className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                                    >
-                                        {slide.cta}
-                                    </Button>
+            // Usando uma função que retorna o JSX em vez de colocá-lo diretamente no objeto
+            renderContent: () => (
+                <div className="absolute inset-0 flex items-center">
+                    <div className="container mx-auto px-8">
+                        <div className="max-w-xl text-white">
+                            <h2 className="text-3xl md:text-4xl font-black mb-4 leading-tight">
+                                Apoie Produtores Locais
+                            </h2>
+                            <p className="text-base md:text-lg font-medium mb-8 opacity-95 leading-relaxed">
+                                Cada compra fortalece a economia local e garante produtos mais frescos para você
+                            </p>
+                            <Button
+                                onClick={() => navigate('/vendors')}
+                                className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                            >
+                                Conhecer Vendedores
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+    ];
+
+    return (
+        <Carousel className={className}>
+            <CarouselContent>
+                {slides.map((slide) => (
+                    <CarouselItem key={slide.id}>
+                        {slide.renderContent ? slide.renderContent() : (
+                            <div className="relative h-full">
+                                <img
+                                    src={slide.image}
+                                    alt={slide.title}
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 flex items-center">
+                                    <div className="container mx-auto px-8">
+                                        <div className="max-w-xl text-white">
+                                            <h2 className="text-3xl md:text-4xl font-black mb-4 leading-tight">
+                                                {slide.title}
+                                            </h2>
+                                            <p className="text-base md:text-lg font-medium mb-8 opacity-95 leading-relaxed">
+                                                {slide.subtitle}
+                                            </p>
+                                            <Button
+                                                onClick={slide.ctaAction}
+                                                className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                                            >
+                                                {slide.cta}
+                                            </Button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        </div>
+                        )}
                     </CarouselItem>
                 ))}
             </CarouselContent>
